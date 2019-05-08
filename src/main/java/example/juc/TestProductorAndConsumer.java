@@ -1,7 +1,7 @@
 package example.juc;
 
 /**
- * 生产者消费者案例
+ * 生产者消费者案例：虚假唤醒
  *
  * 生产者线程：添加创建数据的线程
  * 消费者线程：删除和销毁数据的线程
@@ -13,10 +13,10 @@ public class TestProductorAndConsumer {
         Reposity reposity = new Reposity();
         Productor productor = new Productor(reposity);
         Consumer consumer = new Consumer(reposity);
-        new Thread(productor, "productor01").start();
-        new Thread(consumer, "consumer01").start();
-        new Thread(productor, "productor02").start();
-        new Thread(consumer, "consumer02").start();
+        new Thread(productor, "生产者 1 ").start();
+        new Thread(consumer, "消费者 1 ").start();
+        new Thread(productor, "生产者 2 ").start();
+        new Thread(consumer, "消费者 2 ").start();
     }
 }
 
@@ -24,33 +24,37 @@ class Reposity {
     private int product = 0;
 
     public synchronized void getProduct() {
-        if (product <= 0) {
-            System.out.println(Thread.currentThread().getName() + " 缺少库存");
+        while (product < 1) {
             try {
+                System.out.println(Thread.currentThread().getName() + "不足");
                 this.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else {
-            product --;
-            System.out.println(Thread.currentThread().getName() + " - " + product);
-            this.notifyAll();
         }
+        product --;
+        System.out.println(Thread.currentThread().getName() + " - " + product);
+        this.notifyAll();
+
+
+
     }
 
     public synchronized void addProduct() {
-        if (product >= 10) {
-            System.out.println(Thread.currentThread().getName() +" 库存满了");
+        while (product >= 1) {
             try {
+                System.out.println(Thread.currentThread().getName() + "已满");
                 this.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else {
-            product ++;
-            System.out.println(Thread.currentThread().getName() + " - " + product);
-            this.notifyAll();
         }
+        product ++;
+        System.out.println(Thread.currentThread().getName() + " - " + product);
+        this.notifyAll();
+
+
+
 
     }
 }
@@ -66,6 +70,11 @@ class Productor implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 20; i++) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             this.reposity.addProduct();
         }
     }
