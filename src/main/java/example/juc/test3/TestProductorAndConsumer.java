@@ -10,9 +10,9 @@ package example.juc.test3;
  */
 public class TestProductorAndConsumer {
     public static void main(String[] args) {
-        example.juc.test4.Reposity reposity = new example.juc.test4.Reposity();
-        example.juc.test4.Productor productor = new example.juc.test4.Productor(reposity);
-        example.juc.test4.Consumer consumer = new example.juc.test4.Consumer(reposity);
+        Reposity reposity = new Reposity();
+        Productor productor = new Productor(reposity);
+        Consumer consumer = new Consumer(reposity);
         new Thread(productor, "生产者 1 ").start();
         new Thread(consumer, "消费者 1 ").start();
         new Thread(productor, "生产者 2 ").start();
@@ -61,9 +61,9 @@ class Reposity {
 
 
 class Productor implements Runnable {
-    example.juc.test4.Reposity reposity = new example.juc.test4.Reposity();
+    Reposity reposity = new Reposity();
 
-    public Productor(example.juc.test4.Reposity reposity) {
+    public Productor(Reposity reposity) {
         this.reposity = reposity;
     }
 
@@ -82,9 +82,9 @@ class Productor implements Runnable {
 
 
 class Consumer implements Runnable {
-    example.juc.test4.Reposity reposity = new example.juc.test4.Reposity();
+    Reposity reposity = new Reposity();
 
-    public Consumer(example.juc.test4.Reposity reposity) {
+    public Consumer(Reposity reposity) {
         this.reposity = reposity;
     }
 

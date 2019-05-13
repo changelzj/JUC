@@ -1,4 +1,4 @@
-package example.juc.test1;
+package example.juc.test2;
 
 import org.junit.Test;
 
