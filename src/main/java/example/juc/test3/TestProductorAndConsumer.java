@@ -1,4 +1,4 @@
-package example.juc;
+package example.juc.test3;
 
 /**
  * 生产者消费者案例：虚假唤醒
@@ -10,9 +10,9 @@ package example.juc;
  */
 public class TestProductorAndConsumer {
     public static void main(String[] args) {
-        Reposity reposity = new Reposity();
-        Productor productor = new Productor(reposity);
-        Consumer consumer = new Consumer(reposity);
+        example.juc.test4.Reposity reposity = new example.juc.test4.Reposity();
+        example.juc.test4.Productor productor = new example.juc.test4.Productor(reposity);
+        example.juc.test4.Consumer consumer = new example.juc.test4.Consumer(reposity);
         new Thread(productor, "生产者 1 ").start();
         new Thread(consumer, "消费者 1 ").start();
         new Thread(productor, "生产者 2 ").start();
@@ -61,9 +61,9 @@ class Reposity {
 
 
 class Productor implements Runnable {
-    Reposity reposity = new Reposity();
+    example.juc.test4.Reposity reposity = new example.juc.test4.Reposity();
 
-    public Productor(Reposity reposity) {
+    public Productor(example.juc.test4.Reposity reposity) {
         this.reposity = reposity;
     }
 
@@ -82,9 +82,9 @@ class Productor implements Runnable {
 
 
 class Consumer implements Runnable {
-    Reposity reposity = new Reposity();
+    example.juc.test4.Reposity reposity = new example.juc.test4.Reposity();
 
-    public Consumer(Reposity reposity) {
+    public Consumer(example.juc.test4.Reposity reposity) {
         this.reposity = reposity;
     }
 

@@ -1,4 +1,4 @@
-package example.juc;
+package example.juc.test1;
 
 /**
  * 内存可见性

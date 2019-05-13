@@ -1,4 +1,4 @@
-package example.juc;
+package example.juc.test2;
 
 import java.util.concurrent.CountDownLatch;
 
