@@ -11,7 +11,7 @@ import java.util.concurrent.RecursiveTask;
 public class TestForkJoin {
     public static void main(String[] args) {
         ForkJoinPool pool = new ForkJoinPool();
-        SumCalculate calculate = new SumCalculate(0L, 900_0000_0000L);
+        SumCalculate calculate = new SumCalculate(0L, 100_0000_0000L);
         Long invoke = pool.invoke(calculate);
         System.out.println(invoke);
     }
