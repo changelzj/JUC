@@ -7,7 +7,7 @@ import java.util.concurrent.FutureTask;
 public class TestCallable {
     /**
      * 除了thread runable 外的第三种创建线程的方式
-     * 比较runable ，Callable既可以返回值，又能抛出异常
+     * 比较runable ，Callable既可以返回值，又能抛出异常，又带有泛型
      */
     public static void main(String[] args) {
         MyCallable callable = new MyCallable();
