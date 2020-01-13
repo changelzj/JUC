@@ -60,7 +60,7 @@ public class TestThreadPool {
         pool.shutdown();
 
         // 立即关闭所有线程
-        // pool.shutdownNow();
+        // pool.shutdownNow(); 
     }
 }
 
