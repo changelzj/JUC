@@ -14,13 +14,13 @@ public class CopyOnWriteArrayListTest {
      * 底层利用锁分段机制保证线程安全，默认16个段，每个段都是独立的锁，并提供了符合操作的方法，
      */
     public static void main(String[] args) {
+        List<String> list = new CopyOnWriteArrayList<>();
+        
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        
         Runnable runnable = new Runnable() {
-            List<String> list = new CopyOnWriteArrayList<>();
-            {
-                list.add("a");
-                list.add("b");
-                list.add("c");
-            }
             @Override
             public void run() {
                 Iterator<String> iterator = list.iterator();

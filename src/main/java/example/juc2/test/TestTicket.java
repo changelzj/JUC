@@ -22,7 +22,7 @@ public class TestTicket {
     
     public static class Ticket {
         private Integer number = 1000;
-        private Lock lock = new ReentrantLock();
+        private Lock lock = new ReentrantLock(false);//非公平锁
         
         public synchronized void saleTicket() {
             if (number > 0) {

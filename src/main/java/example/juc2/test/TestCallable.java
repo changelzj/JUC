@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 1.futureTask.get() 要在需要结果时在执行
  * 2.多个线程启动，由于缓存，只会执行一次
+ * 3.多个线程运行一个futureTask，只计算一次
  */
 public class TestCallable {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -18,9 +19,13 @@ public class TestCallable {
         });
         new Thread(futureTask).start();
 
+        while (futureTask.isDone()) {
+            System.out.println(Thread.currentThread().getName() + '\t'+" 完成");
+            System.out.println(futureTask.get());
+            break;
+        }
         
-        System.out.println(Thread.currentThread().getName() + '\t'+" 完成");
-        System.out.println(futureTask.get());
+        
         
     }
 }

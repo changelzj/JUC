@@ -14,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SafeList {
     /**
      * ArrayList不安全，不加锁， 效率高 ConcurrentModificationException
+     * 
      * Vector 线程安全，加锁, 效率低
      * 
      * Collections.synchronizedList(new ArrayList<>()) 将线程不安全转换为线程安全

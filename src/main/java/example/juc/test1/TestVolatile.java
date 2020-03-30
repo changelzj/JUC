@@ -12,20 +12,35 @@ package example.juc.test1;
  *  但效率高于锁，性能降低的原因：底层不能再使用JVM底层的重排序优化
  *
  * volatile只能保证内存可见性，1不具备锁的互斥性，2不能保证变量的原子性
+ * 原子性：完整性，不可分割，某个线程做某个业务时，中间不可以被加塞或分割
  *
  */
 public class TestVolatile {
+    
+    static volatile boolean flag = false;
+    
     public static void main(String[] args) {
-        MyRunable runable = new MyRunable();
-        new Thread(runable).start();
-        /*while(true) 调用底层代码，效率极高，不会从主存中再次获取被其他线程修改过的数据*/
+        
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            flag = true;
+            
+            System.out.println("子线程修改flag的值为：  " + flag);
+            
+        }).start();
+        
+        
+        // while(true) 调用底层代码，效率极高，不会从主存中再次获取被其他线程修改过的数据
         while (true) {
-            //synchronized (runable) {
-                if (runable.isFlag()) {
-                    System.out.println("flag is true 主线程结束循环！");
-                    break;
-                }
-            //}
+            if (flag) {
+                System.out.println("flag is true 主线程结束循环！");
+                break;
+            }
 
         }
 
@@ -35,29 +50,6 @@ public class TestVolatile {
 
 
 
-class MyRunable implements Runnable {
 
-    private volatile boolean flag = false;
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        flag = true;
-        System.out.println("子线程修改flag的值为：  " + isFlag());
-    }
-}
 
 

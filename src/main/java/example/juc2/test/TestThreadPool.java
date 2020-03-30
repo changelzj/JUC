@@ -2,6 +2,7 @@ package example.juc2.test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +25,7 @@ public class TestThreadPool {
         //single();
         //cached();
         initPool();
+        //cached2();
     }
 
     /**
@@ -85,35 +87,57 @@ public class TestThreadPool {
             executorService.shutdown();
         }
     }
+    
+    
 
-    /**
-     * 
-     */
-    public static void initPool() {
-        int cpu = Runtime.getRuntime().availableProcessors();
-
-        ExecutorService executorService = new ThreadPoolExecutor(
-                2, // 核心线程数
-                cpu + 2, // CPU密集型程序，取核数加1 | 2
-                2,
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(3),
-                Executors.defaultThreadFactory(),
-                new ThreadPoolExecutor.DiscardPolicy()
-         );
-
+    public static void cached2() {
+        ExecutorService executorService = Executors.newCachedThreadPool();
         try {
             for (int i = 0; i < 10; i++) {
-                executorService.execute(() -> {
-                    System.out.println(Thread.currentThread().getName() + " 执行");
+                Future<String> future = executorService.submit(() -> {
+                    return Thread.currentThread().getName() + " 执行";
                 });
-
-                //TimeUnit.SECONDS.sleep(1);
+                System.out.println(future.get());
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             executorService.shutdown();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public static void initPool() {
+
+        ExecutorService executorService = new ThreadPoolExecutor(
+                2, // 核心线程数
+                Runtime.getRuntime().availableProcessors() + 2, // CPU密集型程序，取核数加1 | 2
+                1,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(3),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy()
+         );
+
+        try {
+            for (int i = 0; i < 10000; i++) {
+                executorService.execute(() -> {
+                    System.out.println(Thread.currentThread().getName() + " 执行");
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //executorService.shutdown();
         }
     } 
 }

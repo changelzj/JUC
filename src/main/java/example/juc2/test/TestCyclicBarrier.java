@@ -11,14 +11,14 @@ public class TestCyclicBarrier {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(7, new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread() + "最终执行");
+                System.out.println(Thread.currentThread().getName() + " 最终执行");
             }
         });
 
         for (int i = 0; i < 7; i++) {
             int finalI = i;
             new Thread(() -> {
-                System.out.println(Thread.currentThread() + "第"+finalI +"次");
+                System.out.println(Thread.currentThread().getName() + " 第"+finalI +"次");
                 try {
                     cyclicBarrier.await();
                 } catch (InterruptedException e) {
