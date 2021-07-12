@@ -4,9 +4,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TestReentrantLock {
+public class TestTryLock {
     
-    private static Lock lock = new ReentrantLock();
+    private static final Lock lock = new ReentrantLock();
     private static int i = 0;
 
     /**
@@ -15,10 +15,10 @@ public class TestReentrantLock {
     public static void main(String[] args) {
         for (int i = 0; i < 1000; i++) {
             new Thread(() -> {
-                //tryLock();
                 try {
-                    tryLockTime();
-                } catch (InterruptedException e) {
+                    tryLock();
+                    //tryLockTime();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).start();
