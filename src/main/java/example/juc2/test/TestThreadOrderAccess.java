@@ -8,18 +8,18 @@ public class TestThreadOrderAccess {
     
     public static class ShareResource {
         
-        private String flag = "A";
+        private char flag = 'A';
         
-        private Lock lock = new ReentrantLock();
+        private final Lock lock = new ReentrantLock();
         
-        private Condition conditionA = lock.newCondition();
-        private Condition conditionB = lock.newCondition();
-        private Condition conditionC = lock.newCondition();
+        private final Condition conditionA = lock.newCondition();
+        private final Condition conditionB = lock.newCondition();
+        private final Condition conditionC = lock.newCondition();
         
         public void doA() {
             lock.lock();
             try {
-                while (flag != "A") {
+                while (flag != 'A') {
                     conditionA.await();
                 }
 
@@ -27,7 +27,7 @@ public class TestThreadOrderAccess {
                     System.out.println(Thread.currentThread().getName() + "\t" +i);
                 }
                 
-                flag = "B";
+                flag = 'B';
                 conditionB.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -39,7 +39,7 @@ public class TestThreadOrderAccess {
         public void doB() {
             lock.lock();
             try {
-                while (flag != "B") {
+                while (flag != 'B') {
                     conditionB.await();
                 }
 
@@ -47,7 +47,7 @@ public class TestThreadOrderAccess {
                     System.out.println(Thread.currentThread().getName() + "\t" +i);
                 }
 
-                flag = "C";
+                flag = 'C';
                 conditionC.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -59,7 +59,7 @@ public class TestThreadOrderAccess {
         public void doC() {
             lock.lock();
             try {
-                while (flag != "C") {
+                while (flag != 'C') {
                     conditionC.await();
                 }
 
@@ -67,7 +67,9 @@ public class TestThreadOrderAccess {
                     System.out.println(Thread.currentThread().getName() + "\t" +i);
                 }
 
-                flag = "A";
+                System.out.println("*********");
+
+                flag = 'A';
                 conditionA.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -82,19 +84,19 @@ public class TestThreadOrderAccess {
         ShareResource shareResource = new ShareResource();
         
         new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 3; i++) {
                 shareResource.doA();
             }
         }, "A").start();
         
         new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 3; i++) {
                 shareResource.doB();
             }
         }, "B").start();
         
         new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 3; i++) {
                 shareResource.doC();
             }
         }, "C").start();

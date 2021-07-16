@@ -35,9 +35,6 @@ class Reposity {
         product --;
         System.out.println(Thread.currentThread().getName() + " - " + product);
         this.notifyAll();
-
-
-
     }
 
     public synchronized void addProduct() {
@@ -52,10 +49,6 @@ class Reposity {
         product ++;
         System.out.println(Thread.currentThread().getName() + " - " + product);
         this.notifyAll();
-
-
-
-
     }
 }
 
